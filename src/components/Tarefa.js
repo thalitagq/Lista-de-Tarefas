@@ -6,27 +6,26 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, Paper } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+
 var idCont = 0;
 
 var styles = {
     card: {
-        width: 300,
-        height: 300,
-        backgroundColor:"",
+        width: '100%',
+        maxWidth: 300,
         margin: 20
+    
     },
-    bullet: {
-      display: 'inline-block',
-      margin: '0 2px',
-      transform: 'scale(0.8)',
-    },
+  
     title: {
       fontSize: 14,
+     
     },
-    pos: {
-      marginBottom: 12,
-    },
+   
   };
 
 export default class Tareja extends React.Component{
@@ -35,38 +34,75 @@ export default class Tareja extends React.Component{
         this.incrementarId = this.incrementarId.bind(this);
         this.state = {
             id: this.incrementarId(),
-            nome: "",
-            descricao: "",
-            prazo: "",
-            prioridade: "",
-            concluida: ""            
+            nome: this.props.props.nome,
+            descricao: this.props.props.descricao,
+            prazo: this.props.props.prazo,
+            prioridade: this.props.props.prioridade,
+            concluida: " "            
         };
     }
 
     incrementarId(){
         idCont++;
+
         return idCont;
     }
 
     render(){
-    
-        console.log(idCont);
+        console.log("EM TAREFA")
+        console.log(this.state.nome);
         return(
-            <Card style={styles.card}>
+          <div> 
+           <Card style={styles.card}>
             <CardContent>
-              <Typography style={styles.title} color="textSecondary" gutterBottom>
-                Word of the Day
-              </Typography>
-              <Typography variant="h5" component="h2">
-                benevolent
-              </Typography>
+                 <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom >
+                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}} >Id: </Typography>
+                     {" "+this.state.id}
+                </Typography>
+                <br />
+                <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom >
+                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}} >Nome: </Typography>
+                     {" "+this.state.nome}
+                </Typography>
+                <br />
+                <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom>
+                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}} >Descrição: </Typography>
+                     {" "+this.state.descricao}
+                </Typography>
+                <br />
+                <Typography variant="subheading" style={{display: 'inline-block'}}  gutterBottom>
+                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}} >Prazo: </Typography>
+                     {" "+this.state.prazo}
+                </Typography>
+                <br />
+                <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom>
+                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}}  >Prioridade: </Typography>
+                     {" "+this.state.prioridade}
+                </Typography>
+                <br />
+                <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom>
+                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}}  >Concluída: </Typography>
+                     {" "+this.state.concluida}
+                </Typography>            
             </CardContent>
-
-            <CardActions>
-              <Button size="small">Learn More</Button>
-            </CardActions>
-          </Card>
            
+                <CardActions style={{justifyContent:"flex-start"}}>
+                    <Button size="small" style={{marginRight: 80, marginLeft: 20}}>Visualizar</Button>
+                
+                <CardActions >
+                    <IconButton aria-label="Delete" >
+                        <Delete />
+                    </IconButton>
+                    <IconButton aria-label="Edit" >
+                        <Edit />
+                    </IconButton>
+                </CardActions>
+                </CardActions>
+           
+            </Card>
+           
+           
+           </div>
         );
     };
 
