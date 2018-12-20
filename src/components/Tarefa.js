@@ -14,6 +14,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Checkbox from '@material-ui/core/Checkbox';
 import green from '@material-ui/core/colors/green';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 var idCont = 0;
 
 var styles = {
@@ -62,17 +65,8 @@ export default class Tareja extends React.Component{
         this.setState({ [name]: event.target.checked });
       };
 
-    // handleDelete = (index) =>{
-    //     const copyTarefas = Object.assign([], this.state.tarefas);
-    //     copyTarefas.slice(index,1);
-    //     this.setState({
-    //         tarefas: copyTarefas
-    //     })
-    // }
-
     render(){
-        console.log("EM TAREFA")
-        console.log(this.props)
+
         return(
           <div> 
            <Card style={styles.card}>
@@ -97,6 +91,7 @@ export default class Tareja extends React.Component{
                      {" "+this.state.prazo}
                 </Typography>
                 <br />
+              
                 <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom>
                     <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}}  >Prioridade: </Typography>
                      {" "+this.state.prioridade}

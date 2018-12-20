@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 
+
 export default class ListaTarefas extends React.Component{
     
     constructor(props){
@@ -16,26 +17,12 @@ export default class ListaTarefas extends React.Component{
     }
     
     handleDelete = (index) =>{
-        console.log("DELETE")
-        console.log(index)
         const copyTarefas = Object.assign([],this.state.tarefas);
-        if(copyTarefas.length===1){
-            const t = copyTarefas.slice(index+1,1);
-            console.log("copia tarefas")
-            console.log(t)
-            this.setState({
-                 tarefas: t
-            }) 
-        }
-        else{
-            const t = copyTarefas.slice(index,1);
-            console.log("copia tarefas")
-            console.log(t)
-            this.setState({
-                 tarefas: t
-            }) 
-        }
-    
+        delete copyTarefas[index]
+        this.setState({
+            tarefas: copyTarefas
+        }) 
+        this.props.callback(copyTarefas)
     }
 
     handleSave = (event) => {
@@ -53,8 +40,7 @@ export default class ListaTarefas extends React.Component{
             prioridade: "",
 
         }
-        console.log("LISTA DE TAREFAS")
-        console.log(this.state.tarefas)
+
         if(this.state.tarefas.length>0){
             return(
         

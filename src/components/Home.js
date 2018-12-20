@@ -14,6 +14,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Tarefa from './Tarefa';
 import ListaTarefas from './ListaTarefas';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = {
     root: {
@@ -47,8 +50,7 @@ export default class Home extends React.Component{
       };
     
     handleChange = name => ({target: {value} }) =>{
-        console.log(name);
-        console.log(value);
+
         this.setState({ 
             novaTarefa: {
                 ...this.state.novaTarefa,
@@ -58,10 +60,12 @@ export default class Home extends React.Component{
     }; 
 
     handleSave = (event) => {
+        console.log("prioridade")
+        console.log(this.state.novaTarefa.prioridade)
         const data = this.state.novaTarefa;
         this.state.tarefas.push(data);
         this.setState({ open: false, 
-                       novaTarefa:{
+                        novaTarefa:{
                             nome:"",
                             descricao:"",
                             prazo: "",
@@ -71,7 +75,27 @@ export default class Home extends React.Component{
                  
     };
 
-    
+    myCallback = (dataFromChild) => {
+        this.setState({
+            tarefas: dataFromChild
+        })
+    }
+
+    // handleChangePrioridade = name => event => {
+      
+    //     this.setState({ [name]: event.target.value });
+    //     console.log(event.target.value)
+    // };  
+
+    handleChangePrioridade = name => ({target: {value} }) =>{
+
+        this.setState({ 
+            novaTarefa: {
+                ...this.state.novaTarefa,
+                [name]: value
+            }
+        });
+    }; 
 
     render(){
     
@@ -130,18 +154,25 @@ export default class Home extends React.Component{
               }}
               fullWidth
             />
-            <TextField              
-              margin="dense"
-              label="Prioridade"
-              value = {this.state.novaTarefa.prioridade}
-              type="text"
-              onChange={this.handleChange('prioridade')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              fullWidth
-            />
-           
+            
+            <FormControl >
+                <InputLabel htmlFor="age-native-simple">Prioridade</InputLabel>
+                <Select
+                    native
+                    value={this.state.novaTarefa.prioridade}
+                    onChange={this.handleChangePrioridade('prioridade')}
+                    inputProps={{
+                        name: 'age',
+                        id: 'age-simple',
+                      }}
+                >
+                    <option value="" />
+                    <option value={"Baixa"}>Baixa</option>
+                    <option value={"Média"}>Médiay</option>
+                    <option value={"Alta"}>Alta</option>
+                    <option value={"Muito Alta"}>Muito Alta</option>
+                </Select>
+            </FormControl>          
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
@@ -153,7 +184,7 @@ export default class Home extends React.Component{
           </DialogActions>
         </Dialog>
               
-        <ListaTarefas props={this.state.tarefas} />   
+        <ListaTarefas props={this.state.tarefas}  callback={this.myCallback}/>   
             </div>
         );
     }
