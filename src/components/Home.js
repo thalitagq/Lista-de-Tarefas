@@ -17,7 +17,9 @@ import ListaTarefas from './ListaTarefas';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Close from '@material-ui/icons/Close';
 const styles = {
     root: {
       flexGrow: 1,
@@ -31,6 +33,11 @@ export default class Home extends React.Component{
        
         this.state = {
             open: false, 
+            openError:false,
+            nomeErro: "",
+            descricaoErro: "",
+            prazoErro: "",
+            prioridadeErro: "",
             tarefas: [],
             novaTarefa: {
                 nome:"",
@@ -49,6 +56,9 @@ export default class Home extends React.Component{
         this.setState({ open: false });
       };
     
+      handleCloseError = () => {
+        this.setState({ openError: false });
+    };
     handleChange = name => ({target: {value} }) =>{
 
         this.setState({ 
@@ -59,20 +69,59 @@ export default class Home extends React.Component{
         });
     }; 
 
+    validate = () =>{
+        let isError = false;
+        const errors = {};
+        if(this.state.novaTarefa.nome.length<1){
+            isError = true;
+            errors.nomeErro = "Nome inválido"
+            console.log("nome invalido")
+        }
+        if(this.state.novaTarefa.descricao.length<5){
+            isError = true;
+            errors.nomeErro = "Descrção precisa conter no mínimo 5 caracteres"
+        }
+        if(this.state.novaTarefa.prazo.length<12){
+            isError = true;
+            errors.nomeErro = "Prazo inválido"
+        }
+        if(this.state.novaTarefa.prioridade.length<1){
+            isError = true;
+            errors.nomeErro = "Escolha uma prioridade"
+        }
+
+        if(isError){
+            this.setState({
+                ...this.state,
+                ...errors
+
+            });
+        }
+        
+        return isError;
+
+    }
+
     handleSave = (event) => {
-        console.log("prioridade")
-        console.log(this.state.novaTarefa.prioridade)
-        const data = this.state.novaTarefa;
-        this.state.tarefas.push(data);
-        this.setState({ open: false, 
-                        novaTarefa:{
-                            nome:"",
-                            descricao:"",
-                            prazo: "",
-                            prioridade:"",
-                       } 
-                    });   
-                 
+        const error = this.validate();
+        if(!error){
+            const data = this.state.novaTarefa;
+            this.state.tarefas.push(data);
+            this.setState({ open: false, 
+                            novaTarefa:{
+                                nome:"",
+                                descricao:"",
+                                prazo: "",
+                                prioridade:"",
+                        } 
+            });   
+        }
+        else{
+            this.setState({
+                openError: true,
+                    ...this.state.novaTarefa,
+            })
+        }       
     };
 
     myCallback = (dataFromChild) => {
@@ -80,12 +129,6 @@ export default class Home extends React.Component{
             tarefas: dataFromChild
         })
     }
-
-    // handleChangePrioridade = name => event => {
-      
-    //     this.setState({ [name]: event.target.value });
-    //     console.log(event.target.value)
-    // };  
 
     handleChangePrioridade = name => ({target: {value} }) =>{
 
@@ -111,70 +154,87 @@ export default class Home extends React.Component{
                         </IconButton>
                     </Toolbar>               
                 </AppBar>
-                <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Nova Tarefa</DialogTitle>
-          <DialogContent>
 
-            <TextField             
-              margin="dense"
-              label="Nome da tarefa"
-              value = {this.state.novaTarefa.nome}
-              type="text"
-              onChange={this.handleChange('nome')}
-              InputLabelProps={{
-                shrink: true,
-              }}     
-              fullWidth
-            />
-             <TextField             
-              margin="dense"
-              label="Descrição"
-              value = {this.state.novaTarefa.descricao}
-              type="text"
-              multiline
-              rows="8"
-              onChange={this.handleChange('descricao')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              fullWidth
-            />
-             <TextField              
-              margin="dense"
-              label="Prazo"
-              value = {this.state.novaTarefa.prazo}
-              type="datetime-local"
-              onChange={this.handleChange('prazo')}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              fullWidth
-            />
-            
-            <FormControl >
-                <InputLabel htmlFor="age-native-simple">Prioridade</InputLabel>
-                <Select
-                    native
-                    value={this.state.novaTarefa.prioridade}
-                    onChange={this.handleChangePrioridade('prioridade')}
-                    inputProps={{
-                        name: 'age',
-                        id: 'age-simple',
-                      }}
-                >
-                    <option value="" />
-                    <option value={"Baixa"}>Baixa</option>
-                    <option value={"Média"}>Médiay</option>
-                    <option value={"Alta"}>Alta</option>
-                    <option value={"Muito Alta"}>Muito Alta</option>
-                </Select>
-            </FormControl>          
-          </DialogContent>
-          <DialogActions>
+                <Dialog   open={this.state.openError} onClose={this.handleClose} aria-labelledby="simple-dialog-title" >
+                    <DialogTitle id="simple-dialog-title">Preencha todos os campos</DialogTitle>
+                    <IconButton aria-label="Close" onClick={this.handleCloseError}>
+                        <Close/>
+                    </IconButton>
+                </Dialog>
+                
+                <Dialog
+                            open={this.state.open}
+                            onClose={this.handleClose}
+                            aria-labelledby="form-dialog-title"
+                        >
+                <DialogTitle id="form-dialog-title">Nova Tarefa</DialogTitle>
+                <DialogContent>
+
+                    <TextField      
+                        margin="dense"
+                        label="Nome da tarefa"
+                        value = {this.state.novaTarefa.nome}
+                        type="text"
+                        error={this.state.novaTarefa.nome === ""}
+                        helperText={this.state.novaTarefa.nome === "" ? 'Insira um nome' : ' '}
+                        onChange={this.handleChange('nome')}
+                        InputLabelProps={{
+                            shrink: true,
+                
+                        }}     
+                        fullWidth
+                    />
+                    <TextField             
+                        margin="dense"
+                        label="Descrição"
+                        value = {this.state.novaTarefa.descricao}
+                        type="text"
+                        error={this.state.novaTarefa.descricao === ""}
+                        helperText={this.state.novaTarefa.descricao === "" ? 'Insira uma drecição' : ' '}
+                        multiline
+                        rows="6"
+                        onChange={this.handleChange('descricao')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                    />
+                    <TextField              
+                        margin="dense"
+                        label="Prazo"
+                        value = {this.state.novaTarefa.prazo}
+                        type="datetime-local"
+                        error={this.state.novaTarefa.prazo === ""}
+                        helperText={this.state.novaTarefa.prazo === "" ? 'Escolha o prazo' : ' '}
+                        onChange={this.handleChange('prazo')}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        fullWidth
+                    />
+                    
+                    <FormControl >
+                        <InputLabel htmlFor="age-native-simple">Prioridade</InputLabel>
+                        <Select
+                            native
+                            value={this.state.novaTarefa.prioridade}
+                            onChange={this.handleChangePrioridade('prioridade')}
+                            error={this.state.novaTarefa.prioridade === ""}
+                            helperText={this.state.novaTarefa.prioridade === "" ? 'Escolha a prioridade' : ' '}
+                            inputProps={{
+                                name: 'age',
+                                id: 'age-simple',
+                            }}
+                        >
+                            <option value="" />
+                            <option value={"Baixa"}>Baixa</option>
+                            <option value={"Média"}>Média</option>
+                            <option value={"Alta"}>Alta</option>
+                            <option value={"Muito Alta"}>Muito Alta</option>
+                        </Select>
+                    </FormControl>          
+                </DialogContent>
+            <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancelar
             </Button>
@@ -183,6 +243,12 @@ export default class Home extends React.Component{
             </Button>
           </DialogActions>
         </Dialog>
+  
+      
+           
+       
+            
+     
               
         <ListaTarefas props={this.state.tarefas}  callback={this.myCallback}/>   
             </div>

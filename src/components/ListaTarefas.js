@@ -58,14 +58,8 @@ export default class ListaTarefas extends React.Component{
             )
         }
         else{
-        console.log("no else")
             // return <Tarefa props= {t} del = {this.handleDelete}/>;
-            return   <Grid  container
-                            direction="row"
-                            justify="center"
-                            alignItems="center">
-                    <Typography variant="h4" style={{display: 'center', marginTop:150}} gutterBottom>Lista de tarefas vazia</Typography>                  
-                    </Grid> 
+            return  (null)
         }
     }
 }
