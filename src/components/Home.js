@@ -58,11 +58,20 @@ export default class Home extends React.Component{
     }; 
 
     handleSave = (event) => {
-       const data = this.state.novaTarefa;
-       this.state.tarefas.push(data);
-       this.setState({ open: false });
-     
+        const data = this.state.novaTarefa;
+        this.state.tarefas.push(data);
+        this.setState({ open: false, 
+                       novaTarefa:{
+                            nome:"",
+                            descricao:"",
+                            prazo: "",
+                            prioridade:"",
+                       } 
+                    });   
+                 
     };
+
+    
 
     render(){
     
@@ -144,7 +153,7 @@ export default class Home extends React.Component{
           </DialogActions>
         </Dialog>
               
-        <ListaTarefas props={this.state.tarefas}/>   
+        <ListaTarefas props={this.state.tarefas} />   
             </div>
         );
     }

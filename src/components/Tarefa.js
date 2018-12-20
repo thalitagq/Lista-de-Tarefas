@@ -10,7 +10,10 @@ import { CssBaseline, Paper } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
-
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Checkbox from '@material-ui/core/Checkbox';
+import green from '@material-ui/core/colors/green';
 var idCont = 0;
 
 var styles = {
@@ -25,6 +28,13 @@ var styles = {
       fontSize: 14,
      
     },
+    root: {
+        color: green[600],
+        '&$checked': {
+          color: green[500],
+        },
+      },
+      checked: {},
    
   };
 
@@ -38,7 +48,7 @@ export default class Tareja extends React.Component{
             descricao: this.props.props.descricao,
             prazo: this.props.props.prazo,
             prioridade: this.props.props.prioridade,
-            concluida: " "            
+            concluida: false,            
         };
     }
 
@@ -48,9 +58,21 @@ export default class Tareja extends React.Component{
         return idCont;
     }
 
+    handleChange = name => event => {
+        this.setState({ [name]: event.target.checked });
+      };
+
+    // handleDelete = (index) =>{
+    //     const copyTarefas = Object.assign([], this.state.tarefas);
+    //     copyTarefas.slice(index,1);
+    //     this.setState({
+    //         tarefas: copyTarefas
+    //     })
+    // }
+
     render(){
         console.log("EM TAREFA")
-        console.log(this.state.nome);
+        console.log(this.props)
         return(
           <div> 
            <Card style={styles.card}>
@@ -80,17 +102,27 @@ export default class Tareja extends React.Component{
                      {" "+this.state.prioridade}
                 </Typography>
                 <br />
-                <Typography variant="subheading" style={{display: 'inline-block'}} gutterBottom>
-                    <Typography variant="subheading" style={{display: 'inline-block',fontWeight: "bold"}}  >Concluída: </Typography>
-                     {" "+this.state.concluida}
-                </Typography>            
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                        checked={this.state.checkedG}
+                        onChange={this.handleChange('concluida')}
+                        value="concluida"
+                        style={{
+                            root: styles.root,
+                            checked: styles.checked,                          
+                        }}
+                        />
+                    }
+                    label="Concluída"                  
+                />           
             </CardContent>
            
-                <CardActions style={{justifyContent:"flex-start"}}>
-                    <Button size="small" style={{marginRight: 80, marginLeft: 20}}>Visualizar</Button>
-                
                 <CardActions >
-                    <IconButton aria-label="Delete" >
+                    <Button size="medium" style={{flex:1}}>Visualizar</Button>
+                
+                <CardActions style={{justifyContent:"flex-end"}}>
+                    <IconButton aria-label="Delete" onClick={this.props.del}>
                         <Delete />
                     </IconButton>
                     <IconButton aria-label="Edit" >
