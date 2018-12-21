@@ -3,7 +3,8 @@ import Home from './Home'
 import Tarefa from './Tarefa';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
+import EditForm from './EditForm';
+import img from '../img/img.jpg'
 
 
 export default class ListaTarefas extends React.Component{
@@ -12,7 +13,7 @@ export default class ListaTarefas extends React.Component{
         super(props);
        
         this.state = {           
-            tarefas: this.props.props                
+            tarefas: this.props.props,             
         };
     }
     
@@ -25,41 +26,34 @@ export default class ListaTarefas extends React.Component{
         this.props.callback(copyTarefas)
     }
 
-    handleSave = (event) => {
-        const data = this.state.novaTarefa;
-        this.state.tarefas.push(data);
-        this.setState({ open: false,  
-                     });   
-     };
+    handleEdit = (index) =>{
+        console.log("EDIT")
+        console.log(index)              
+    }
 
     render(){
-        const t = {
-            nome: "aha",
-            descricao: "",
-            prazo: "",
-            prioridade: "",
-
-        }
 
         if(this.state.tarefas.length>0){
             return(
-        
-            <Grid  container
-                    direction="row"
-                    justify="center"
-                    alignItems="center">
-                    {this.state.tarefas.map((p, index)=>{ 
-                        return( 
-                            <Tarefa props= {p} del={this.handleDelete.bind(this,index)} save={this.handleSave.bind(this)}/>
-                        )        
-                        })}                   
-            </Grid>        
+            
+                <Grid  container
+                        direction="row"
+                        justify="center"
+                        alignItems="center">
                         
+                        {this.state.tarefas.map((p, index)=>{ 
+                            return( 
+                                <div> 
+                                    <Tarefa props= {p} del={this.handleDelete.bind(this,index)} edit={() =>this.handleEdit(index)}/>                                                      
+                                </div> 
+                            )        
+                            })}                   
+                </Grid>        
+                     
             )
         }
         else{
-            // return <Tarefa props= {t} del = {this.handleDelete}/>;
-            return  (null)
+            return  null
         }
     }
 }

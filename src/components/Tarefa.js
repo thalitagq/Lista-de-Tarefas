@@ -17,13 +17,15 @@ import green from '@material-ui/core/colors/green';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import EditForm from './EditForm';
 var idCont = 0;
 
 var styles = {
     card: {
         width: '100%',
         maxWidth: 300,
-        margin: 20
+        margin: 20,
+        backgroundColor: "#a6d4fa"
     
     },
   
@@ -51,7 +53,8 @@ export default class Tareja extends React.Component{
             descricao: this.props.props.descricao,
             prazo: this.props.props.prazo,
             prioridade: this.props.props.prioridade,
-            concluida: false,            
+            concluida: false,
+            editMode: false            
         };
     }
 
@@ -66,7 +69,7 @@ export default class Tareja extends React.Component{
       };
 
     render(){
-
+        console.log(this.state.editMode)
         return(
           <div> 
            <Card style={styles.card}>
@@ -113,21 +116,21 @@ export default class Tareja extends React.Component{
                 />           
             </CardContent>
            
-                <CardActions >
-                    <Button size="medium" style={{flex:1}}>Visualizar</Button>
+            <CardActions >
+                <Button size="medium" style={{flex:1}}>Visualizar</Button>
                 
                 <CardActions style={{justifyContent:"flex-end"}}>
                     <IconButton aria-label="Delete" onClick={this.props.del}>
                         <Delete />
                     </IconButton>
-                    <IconButton aria-label="Edit" >
+                    <IconButton aria-label="Edit" onClick={this.props.edit}>
                         <Edit />
                     </IconButton>
                 </CardActions>
-                </CardActions>
-           
+                </CardActions>       
             </Card>
-           
+            
+            <EditForm props={this.state}/>            
            
            </div>
         );

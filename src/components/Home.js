@@ -9,24 +9,22 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import Tarefa from './Tarefa';
 import ListaTarefas from './ListaTarefas';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Close from '@material-ui/icons/Close';
+
 const styles = {
     root: {
       flexGrow: 1,
+      backgroundImage: 'url(require("../img/img.jpg"))'
     },
 
   };
-  
+
 export default class Home extends React.Component{
     constructor(props){
         super(props);
@@ -54,6 +52,14 @@ export default class Home extends React.Component{
     
     handleClose = () => {
         this.setState({ open: false });
+        this.setState({ open: false, 
+            novaTarefa:{
+                nome:"",
+                descricao:"",
+                prazo: "",
+                prioridade:"",
+        } 
+        });   
       };
     
       handleCloseError = () => {
@@ -103,6 +109,7 @@ export default class Home extends React.Component{
     }
 
     handleSave = (event) => {
+        console.log("SAVE")
         const error = this.validate();
         if(!error){
             const data = this.state.novaTarefa;
@@ -144,21 +151,21 @@ export default class Home extends React.Component{
     
         return(
             <div style={styles.root}>
-                <AppBar position="static" color="default">
+                <AppBar position="static" color="default" style={{backgroundColor: "#00b0ff", height:80, justifyContent:"center"}}>
                     <Toolbar>
-                        <Typography variant="h5" color="inherit" style={{flex: 1}}>
-                            Tarefas
+                        <Typography variant="h4" color="inherit" style={{flex: 1}}>
+                            Lista de Tarefas
                         </Typography>
                         <IconButton aria-label="Delete"  onClick={this.handleClickOpen}>
                             <Add style={{width: 45, height: 45}}/>
                         </IconButton>
                     </Toolbar>               
                 </AppBar>
-
+               
                 <Dialog   open={this.state.openError} onClose={this.handleClose} aria-labelledby="simple-dialog-title" >
                     <DialogTitle id="simple-dialog-title">Preencha todos os campos</DialogTitle>
-                    <IconButton aria-label="Close" onClick={this.handleCloseError}>
-                        <Close/>
+                    <IconButton  size="small" aria-label="Close" onClick={this.handleCloseError}>
+                        <Close size="small"/>
                     </IconButton>
                 </Dialog>
                 
@@ -166,10 +173,11 @@ export default class Home extends React.Component{
                             open={this.state.open}
                             onClose={this.handleClose}
                             aria-labelledby="form-dialog-title"
+                           
                         >
                 <DialogTitle id="form-dialog-title">Nova Tarefa</DialogTitle>
                 <DialogContent>
-
+               
                     <TextField      
                         margin="dense"
                         label="Nome da tarefa"
@@ -190,7 +198,7 @@ export default class Home extends React.Component{
                         value = {this.state.novaTarefa.descricao}
                         type="text"
                         error={this.state.novaTarefa.descricao === ""}
-                        helperText={this.state.novaTarefa.descricao === "" ? 'Insira uma drecição' : ' '}
+                        helperText={this.state.novaTarefa.descricao.length < 5 ? 'Insira uma descrição com no mínimo 5 caracteres' : ' '}
                         multiline
                         rows="6"
                         onChange={this.handleChange('descricao')}
@@ -243,12 +251,6 @@ export default class Home extends React.Component{
             </Button>
           </DialogActions>
         </Dialog>
-  
-      
-           
-       
-            
-     
               
         <ListaTarefas props={this.state.tarefas}  callback={this.myCallback}/>   
             </div>
